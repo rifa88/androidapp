@@ -104,10 +104,10 @@ class SimpleApp(MDApp):
     points = NumericProperty(0)
 
     def build(self):
-        self.ads.new_banner("ca-app-pub-8047804359856673/9152534974", top_pos=True)
+        self.ads.new_banner("ca-app-pub-8047804359856673~9152534974", top_pos=True)
         self.ads.request_banner()
         self.ads.show_banner()
-        self.ads.new_interstitial("ca-app-pub-8047804359856673/5463721348")
+        self.ads.new_interstitial("ca-app-pub-8047804359856673~5463721348")
         self.ads.show_interstitial()
         self.ads.load_rewarded_ad(TestIds.REWARDED_VIDEO)
         self.ads.set_rewarded_ad_listener(self.rewards)
