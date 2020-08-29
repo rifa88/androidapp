@@ -16,7 +16,6 @@ Builder.load_string(
     SimpleUI:
     InterstitialAdScreen:
     Rewarded:
-
 <SimpleUI>:
     name:"UI"
     Label:
@@ -29,14 +28,12 @@ Builder.load_string(
         on_release:
             app.root.transition = SlideTransition(direction = "left")
             app.root.current = "Interstitial"
-
     MDRaisedButton:
         text:"Rewarded Video AD Screen"
         pos_hint:{"center_x":0.5,"top":0.4}
         on_release:
             app.root.transition = SlideTransition(direction = "left")
             app.root.current = "rewarded"
-
 <InterstitialAdScreen>:
     name: "Interstitial"
     MDRaisedButton:
@@ -44,7 +41,6 @@ Builder.load_string(
         pos_hint:{"center_x":0.5,"top":0.6}
         on_release:
             root.Show()
-
     MDRaisedButton:
         text:"Back"
         pos_hint:{"center_x":0.5,"top":0.8}
@@ -74,21 +70,18 @@ Builder.load_string(
 class Screenmgr(ScreenManager):
     pass
 
-
 class SimpleUI(Screen):
     pass
 
-
 class InterstitialAdScreen(Screen):
     def on_pre_enter(self, *args):
-        SimpleApp.ads.request_interstitial()  # Intersitial ads is loaded in memory
+        SimpleApp.ads.request_interstitial()    # Intersitial ads is loaded in memory
 
     def on_pre_leave(self, *args):
         SimpleApp.ads.request_interstitial()  # reloading ad again .
 
     def Show(self):
         SimpleApp.ads.show_interstitial()
-
 
 class Rewarded(Screen):
     pass
@@ -100,15 +93,13 @@ class SimpleApp(MDApp):
         super().__init__(**kwargs)
         self.rewards = Rewards_Handler(self)
 
-    ads = KivMob("ca-app-pub-8047804359856673~4071598682")  # put your Admob Id in case you want to put your own ads.
+    ads = KivMob(TestIds.APP) # put your Admob Id in case you want to put your own ads.
     points = NumericProperty(0)
-
     def build(self):
-        self.ads.new_banner("ca-app-pub-8047804359856673~9152534974", top_pos=True)
+        self.ads.new_banner(TestIds.BANNER,False)
         self.ads.request_banner()
         self.ads.show_banner()
-        self.ads.new_interstitial("ca-app-pub-8047804359856673~5463721348")
-        self.ads.show_interstitial()
+        self.ads.new_interstitial(TestIds.INTERSTITIAL)
         self.ads.load_rewarded_ad(TestIds.REWARDED_VIDEO)
         self.ads.set_rewarded_ad_listener(self.rewards)
 
@@ -119,22 +110,22 @@ class SimpleApp(MDApp):
 
 
 class Rewards_Handler(RewardedListenerInterface):
-    def __init__(self, other):
+    def __init__(self,other):
         self.AppObj = other
 
+
     def on_rewarded(self, reward_name, reward_amount):
-        self.AppObj.points += int(reward_amount)  # in Sample ad unit default amount is 10
+        self.AppObj.points += int(reward_amount)   # in Sample ad unit default amount is 10
         toast("User recieved 10 points")
 
-    def on_rewarded_video_ad_started(self):  # Reloading Ad
+    def on_rewarded_video_ad_started(self):    # Reloading Ad
         self.AppObj.load_video()
 
     def on_rewarded_video_ad_completed(self):
-        self.on_rewarded("Points", "10")
+        self.on_rewarded("Points","10")
 
     def on_rewarded_video_ad_closed(self):
         self.AppObj.points += 0
-
 
 if __name__ == "__main__":
     SimpleApp().run()
